@@ -37,7 +37,7 @@ const BoardDetail = () => {
   // },[]) //두번째 인자로 빈 배열줘야 fetchData 함수가 한 번만 실행
 
   const handleSubmit = (e) => {
-    //새 댓글 배열에 추가하는 axios post요청 ㅇㅇ.
+    // 새 댓글 배열에 추가하는 axios post요청 ㅇㅇ.
     // const handleSubmit = async(e) => {
     //   e.preventDefault();
     //   try {

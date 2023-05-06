@@ -18,7 +18,7 @@ const MyDataPage = () => {
   const [confirmPassword, setConfirmPassword] = useAtom(confirmPasswordAtom);
 
   setEmail('rani@gmail.com');
-  setName('라니안');
+  setName('고양이');
   setNickname('라니라니');
   setPassword('1234');
   setConfirmPassword('1234');
@@ -35,9 +35,9 @@ const MyDataPage = () => {
   return (
     <MyDataWrapper>
       <ProfileForm />
-      <MainForm>
+      <MainContainer>
         <HeaderForm />
-        <MyDataForm onSubmit={handleSubmit}>
+        <MyDataContainer onSubmit={handleSubmit}>
           <label>이메일</label>
           <Contents
             type='email'
@@ -47,14 +47,14 @@ const MyDataPage = () => {
           />
           <label>이름</label>
           <Contents
-            type='text'
+            type='name'
             value={name}
             readOnly
             onChange={(event) => setName(event.target.value)}
           />
           <label>닉네임</label>
           <Contents
-            type='text'
+            type='nickname'
             value={nickname}
             onChange={(event) => setNickname(event.target.value)}
           />
@@ -62,6 +62,8 @@ const MyDataPage = () => {
           <Contents
             type='password'
             value={password}
+            required
+            minLength='8'
             onChange={(event) => setPassword(event.target.value)}
           />
           <label>비밀번호 확인</label>
@@ -71,8 +73,8 @@ const MyDataPage = () => {
             onChange={(event) => setConfirmPassword(event.target.value)}
           />
           <SubmitButton type='submit'>저장</SubmitButton>
-        </MyDataForm>
-      </MainForm>
+        </MyDataContainer>
+      </MainContainer>
     </MyDataWrapper>
   );
 };
@@ -87,20 +89,20 @@ const MyDataWrapper = styled.div`
   } */
 `;
 
-const MainForm = styled.form`
+const MainContainer = styled.form`
   display: flex;
   flex-direction: column;
   margin: 10px;
 `;
 
-const MyDataForm = styled.div`
+const MyDataContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 
   width: 500px;
-  height: 400px;
+  height: 550px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
 
   /* @media (max-width: 768px) {
@@ -118,7 +120,7 @@ const Contents = styled.input`
 
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   width: 80%;
-  height: 35px;
+  height: 30px;
   margin: 10px;
   padding: 5px;
 `;

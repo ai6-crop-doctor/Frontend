@@ -7,14 +7,15 @@ const MySignOutPage = () => {
   return (
     <SingOutWrapper>
       <ProfileForm />
-      <MainForm>
+      <MainContainer>
         <HeaderForm />
-        <SignOutForm>
+        <SignOutContainer>
           <h2>정말로 탈퇴하시겠습니까?</h2>
           <Contents>비밀번호</Contents>
           <Contents>비밀번호 확인</Contents>
-        </SignOutForm>
-      </MainForm>
+          <SubmitButton type='submit'>회원탈퇴</SubmitButton>
+        </SignOutContainer>
+      </MainContainer>
     </SingOutWrapper>
   );
 };
@@ -26,20 +27,20 @@ const SingOutWrapper = styled.div`
   margin: 30px;
 `;
 
-const MainForm = styled.div`
+const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin: 10px;
 `;
 
-const SignOutForm = styled.div`
+const SignOutContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 
   width: 500px;
-  height: 400px;
+  height: 550px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
 `;
 
@@ -52,6 +53,15 @@ const Contents = styled.div`
   width: 80%;
   height: 35px;
   margin: 10px;
+`;
+
+const SubmitButton = styled.button`
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  margin: 20px;
 `;
 
 export default MySignOutPage;

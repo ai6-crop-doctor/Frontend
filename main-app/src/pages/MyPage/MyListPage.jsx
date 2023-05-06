@@ -6,24 +6,37 @@ import HeaderForm from '../../components/MyPage/HeaderForm';
 const MyListPage = () => {
   return (
     <MyListWrapper>
-      <HeaderForm />
-      <MainForm>
-        <ProfileForm />
-      </MainForm>
+      <ProfileForm />
+      <MainContainer>
+        <HeaderForm />
+        <MyListContainer></MyListContainer>
+      </MainContainer>
     </MyListWrapper>
   );
 };
 
 const MyListWrapper = styled.div`
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin: 30px;
 `;
 
-const MainForm = styled.div`
+const MainContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  margin: 10px;
+`;
+
+const MyListContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  width: 500px;
+  height: 550px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
 `;
 
 export default MyListPage;

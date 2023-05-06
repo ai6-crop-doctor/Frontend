@@ -6,16 +6,16 @@ const HeaderForm = () => {
   return (
     <Nav>
       <Menu>
-        <StyledLink to='/(진단목록)'>
+        <StyledLink to='/mylist'>
           <MenuBar>진단 목록</MenuBar>
         </StyledLink>
-        <StyledLink to=''>
+        <StyledLink to='/mypage'>
           <MenuBar>나의 게시물</MenuBar>
         </StyledLink>
-        <StyledLink to=''>
+        <StyledLink to='/mydata'>
           <MenuBar>나의 정보</MenuBar>
         </StyledLink>
-        <StyledLink to=''>
+        <StyledLink to='/signout'>
           <MenuBar>회원 탈퇴</MenuBar>
         </StyledLink>
       </Menu>
