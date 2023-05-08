@@ -1,9 +1,8 @@
 import React, { useRef, useState, useCallback } from 'react';
+import { useMutation } from 'react-query';
 import styled from 'styled-components';
 import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
-// import * as API from '../../commons/api';
-// import { useUserDispatch } from '../../context/UserContext';
+import { Link, useNavigate, Route } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -12,40 +11,65 @@ const Login = () => {
   const passwordRef = useRef();
   const navigate = useNavigate();
 
-  // const dispatch = useUserDispatch();
-
-  /** 로그인 API */
-  const loginAPI = async (userData) => {
-    try {
-      const { data } = await axios.post('/users/sign-in', userData);
-      // console.log("login", data);
-
-      //토큰처리?? => 세션스토리지로 처리
-      sessionStorage.setItem('token', data.token);
-
-      // dispatch({
-      //   type: 'LOGIN',
-      //   isLoggedIn: true,
-      // });
-
-      navigate('/');
-    } catch (err) {
-      console.log('Error', err?.response?.data);
-      navigate('/login');
-      alert('이메일 또는 비밀번호를 확인해주세요');
+  /** {mutate}로 API 요청 */
+  const { mutate } = useMutation(
+    (userData) => axios.post('/users/sign-in', userData),
+    {
+      onSuccess: (data) => {
+        sessionStorage.setItem('token', data.token);
+        navigate('/');
+      },
+      onError: (error) => {
+        console.log('Error', error?.response?.data);
+        navigate('/login');
+        alert('이메일 또는 비밀번호를 확인해주세요');
+      },
     }
-  };
+  );
 
-  /** 로그인 제출 */
+  /** {mutate}로 로그인 제출 */
   const loginSubmit = useCallback(
     (e) => {
       e.preventDefault();
-      loginAPI({ email, password });
+      mutate({ email, password });
       setEmail('');
       setPassword('');
     },
-    [email, password]
+    [email, password, mutate]
   );
+
+  /** 로그인 API */
+  // const loginAPI = async (userData) => {
+  //   try {
+  //     const { data } = await axios.post('/users/sign-in', userData);
+  //     console.log('login', data);
+
+  //     //토큰처리?? => 세션스토리지로 처리
+  //     sessionStorage.setItem('token', data.token);
+
+  //     dispatch({
+  //       type: 'LOGIN',
+  //       isLoggedIn: true,
+  //     });
+
+  //     navigate('/');
+  //   } catch (err) {
+  //     console.log('Error', err?.response?.data);
+  //     navigate('/login');
+  //     alert('이메일 또는 비밀번호를 확인해주세요');
+  //   }
+  // };
+
+  /** 구 로그인 제출 */
+  // const handleLogin = useCallback(
+  //   (e) => {
+  //     e.preventDefault();
+  //     loginAPI({ email, password });
+  //     setEmail('');
+  //     setPassword('');
+  //   },
+  //   [email, password]
+  // );
 
   return (
     <LoginWrapper>
@@ -76,7 +100,8 @@ const Login = () => {
         </InputWrapper>
         <button>로그인</button>
         <GotoSignup>
-          <Link to='/signup'>회원가입</Link>
+          {/* <Link to='/signup'>회원가입</Link> */}
+          <Route path='/signup'>회원가입</Route>
         </GotoSignup>
       </Loginform>
     </LoginWrapper>

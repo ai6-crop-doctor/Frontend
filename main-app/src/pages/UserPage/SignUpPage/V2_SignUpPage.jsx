@@ -1,7 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { useMutation } from 'react-query';
+import { useMutation, isSuccess } from 'react-query';
 
 const registerUser = async (data) => {
   const res = await fetch('/api/register', {
@@ -15,10 +15,8 @@ const registerUser = async (data) => {
   return res.json();
 };
 
-const RegisterForm = () => {
-  const { isLoading, isSuccess, isError, error, mutate } =
-    useMutation(signupUser);
-
+/** {mutate}로 회원가입 제출 */
+const SignupForm = () => {
   const [name, setName] = useState('');
   const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
@@ -31,39 +29,66 @@ const RegisterForm = () => {
   const pwRef = useRef();
   const confirmPwRef = useRef();
 
-  const [
-    registerUserMutation,
-    // , { isLoading, isSuccess }
-  ] = useMutation(registerUser);
-
-  const SignUpAPI = async () => {
-    await registerUserMutation({ name, nickname, email, password });
-  };
-
-  const SignUpSubmit = (event) => {
-    event.preventDefault();
-
-    if (!isNameValid) {
-      return nameRef.current.focus();
-    }
-    if (!isNicknameValid) {
-      return nicknameRef.current.focus();
-    }
-    if (!isEmailValid) {
-      return emailRef.current.focus();
-    }
-    if (isNameValid && isNicknameValid && isEmailValid && isPwMatch) {
-      SignUpAPI();
-    }
-  };
-
-  // 폼 유효성 검사 로직 추가
   const [isNameValid, setIsNameValid] = useState(false);
   const [isNicknameValid, setIsNicknameValid] = useState(false);
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [isPwMatch, setIsPwMatch] = useState(false);
 
-  // 이름 유효성 검사
+  const [mutate, { isLoading }] = useMutation(registerUser);
+
+  const signupAPI = async (email, password) => {
+    const response = await fetch('/api/signup', {
+      method: 'POST',
+      body: JSON.stringify({ email, name, nickname, password }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Signup failed');
+    }
+
+    return response.json();
+  };
+
+  const signupSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      mutate({ email, nickname, name, password, confirmPassword });
+      setEmail('');
+      setName('');
+      setNickname('');
+      setPassword('');
+    },
+    [email, password, mutate],
+    signupAPI
+  );
+
+  /** 구 회원가입 제출 */
+  // const SignUpSubmit = (event) => {
+  //   event.preventDefault();
+  //   if (!isNameValid) {
+  //     return nameRef.current.focus();
+  //   }
+  //   if (!isNicknameValid) {
+  //     return nicknameRef.current.focus();
+  //   }
+  //   if (!isEmailValid) {
+  //     return emailRef.current.focus();
+  //   }
+  //   if (isNameValid && isNicknameValid && isEmailValid && isPwMatch) {
+  //     signupAPI();
+  //   }
+  // };
+
+  // 폼 유효성 검사 로직 추가
+  // const [isNameValid, setIsNameValid] = useState(false);
+  // const [isNicknameValid, setIsNicknameValid] = useState(false);
+  // const [isEmailValid, setIsEmailValid] = useState(false);
+  // const [isPwMatch, setIsPwMatch] = useState(false);
+
+  /** 이름 유효성 검사 */
   const handleNameChange = (e) => {
     const name = e.target.value;
     setName(name);
@@ -121,7 +146,7 @@ const RegisterForm = () => {
 
   return (
     <SignUpWrapper>
-      <SignUpForm onSubmit={SignUpSubmit}>
+      <SignUpForm onSubmit={signupSubmit}>
         <h1>회원가입</h1>
         <label>이름</label>
         <InputWrapper>
@@ -224,4 +249,4 @@ const GotoLogin = styled.div`
   font-size: 15px;
 `;
 
-export default RegisterForm;
+export default SignupForm;
